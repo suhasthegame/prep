@@ -20,5 +20,10 @@ class TestGraph(unittest.TestCase):
         order = g.bfs(1)
         self.assertEqual(order, [1,2,4,3])
 
+    def test_dfs(self):
+        g = Graph([(1,2), (2,3), (1,4), (3,6)])
+        adj_list = g.adjacency_list()
+        order = g.dfs(1)
+        self.assertEqual(order, [1,2,3,6,4])
 if __name__ == "__main__":
     unittest.main()

@@ -88,6 +88,34 @@ class Graph:
                         queue.append(neighbor)
         
         return order
+    
+    def dfs(self, start_vertex: Any) -> List[Any]:
+        """This method performs the Depth-First Search on the Graph from a given vertex and returns the order. 
+        
+        Args:
+            start (Any): The starting vertex to begin DFS
 
+        Returns:
+            List[Any]: The DFS-order of elements starting from the start vertex.
+        """ 
+        adj_list = self.adjacency_list()
+        
+        #Check if start_vertex is present in the graph before proceeding 
+        if start_vertex not in adj_list:
+            raise ValueError(f"Given Start Vertex {start_vertex} is not present in the graph.")
+        
+        visited = set()
+        order = []
+        
+        def _dfs_recursive(vertex):
+            visited.add(vertex)
+            order.append(vertex)
+            for neighbor in adj_list[vertex]:
+                if neighbor not in visited:
+                    _dfs_recursive(neighbor)
+        
+        _dfs_recursive(start_vertex)
+        return order
+        
     def __repr__(self):
         return f"Graph has {len(self.vertices)} vertices, {len(self.edges)} edges and is {"directed" if self.directed else "undirected"}"
