@@ -8,7 +8,7 @@ class TestGraph(unittest.TestCase):
         #Check whether all the vertices are being added into the vertices list
         self.assertEqual(set(adj_list.keys()), {1,2,3})
         #Since undirected graph, check if the linking between 2 and 1 exists since we only define edge from 1->2
-        self.assertIn(2, adj_list[1])
+        self.assertIn((2,1), adj_list[1])
     
     def test_adjacency_matrix(self):
         g = Graph([(1,2), (2,3), (3,1)], directed=True)

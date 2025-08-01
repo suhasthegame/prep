@@ -1,19 +1,30 @@
-from typing import List, Tuple, Any, Dict
+from typing import List, Tuple, Any, Dict, Union
 from collections import deque
 
+type edgeType = List[Union[List[Tuple[Any, Any]], List[Tuple[Any,Any,int]]]]
+
 class Graph:
-    def __init__(self, edges: List[Tuple[Any, Any]], directed: bool = False):
+    def __init__(self, edges: edgeType, directed: bool = False):
         """
         Represents a Graph with methods to generate the adjacency list and adjacency matrix format.
         Args:
             edges (List[Tuple[Any, Any]]): The list of edges, where each edge is provided as (u,v) where u and v are verticies
             directed (bool, optional): Indicates whether the edges are directed or not. Defaults to False.
         """
-        self.edges = edges
+        normalized_edges = []
+        for edge in edges:
+            if not isinstance(edge, tuple) or len(edge) not in (2,3):
+                raise ValueError("The edges has to be passed as a list of Tuples of either (u,v) or (u,v,w) where u & v are vertices and w is edge weight")
+            u,v = edge[:2]
+            w = edge[2] if len(edge) == 3 else 1
+            if not isinstance(w, (int,float)):
+                raise ValueError("Weight value must be Integer or Float")
+            normalized_edges.append((u,v,w))
+        self.edges = normalized_edges
         self.directed = directed
-        self.vertices = self._extract_vertices(edges)
+        self.vertices = self._extract_vertices(self.edges)
 
-    def _extract_vertices(self,edges: List[Tuple[Any, Any]]) -> set:
+    def _extract_vertices(self,edges: edgeType) -> set:
         """Extract a set of verticies from the edge list. 
 
         Args:
@@ -23,7 +34,7 @@ class Graph:
             set: Set of Verticies
         """
         vertices = set()
-        for (u, v) in edges:
+        for (u, v, w) in edges:
             vertices.add(u)
             vertices.add(v)
         return vertices
@@ -37,10 +48,10 @@ class Graph:
         """
 
         adj_list = {v: [] for v in self.vertices}
-        for u, v in self.edges:
-            adj_list[u].append(v)
+        for u, v, w in self.edges:
+            adj_list[u].append((v,w))
             if not self.directed and u != v:
-                adj_list[v].append(u)
+                adj_list[v].append((u,w))
         return adj_list
 
     def adjacency_matrix(self) -> List[List[int]]:
@@ -55,11 +66,11 @@ class Graph:
         idx_mapping = {vertex: i for i, vertex in enumerate(vertex_list)}
         size = len(vertex_list)
         matrix = [[0]*size for _ in range(size) ]
-        for u, v in self.edges:
+        for u, v,w in self.edges:
             i, j = idx_mapping[u], idx_mapping[v]
-            matrix[i][j] = 1
+            matrix[i][j] = w
             if not self.directed and i != j:
-                matrix[j][i] = 1
+                matrix[j][i] = w
         
         return matrix
     
@@ -83,7 +94,7 @@ class Graph:
             if vertex not in visited:
                 visited.add(vertex)
                 order.append(vertex)
-                for neighbor in adj_list[vertex]:
+                for neighbor, w in adj_list[vertex]:
                     if neighbor not in visited:
                         queue.append(neighbor)
         
@@ -110,7 +121,7 @@ class Graph:
         def _dfs_recursive(vertex):
             visited.add(vertex)
             order.append(vertex)
-            for neighbor in adj_list[vertex]:
+            for neighbor,w in adj_list[vertex]:
                 if neighbor not in visited:
                     _dfs_recursive(neighbor)
         

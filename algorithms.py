@@ -37,7 +37,7 @@ class GraphAlgorithms:
             """
             visited.add(vertex)
 
-            for neighbor in adj_list[vertex]:
+            for neighbor,w in adj_list[vertex]:
                 if neighbor not in visited:
                     if _check_cycle(neighbor, visited, vertex):
                         return True
