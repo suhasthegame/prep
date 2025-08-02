@@ -18,7 +18,7 @@ class TestAlgorithms(unittest.TestCase):
         is_cyclic = self.algorithms.is_cyclic_undirected(g)
         self.assertFalse(is_cyclic)
     
-    def test_is_cyclic_valueerror(self):
+    def test_is_cyclic_typemismatch(self):
         g = []
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             self.algorithms.is_cyclic_undirected(g)

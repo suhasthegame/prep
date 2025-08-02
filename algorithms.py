@@ -1,4 +1,5 @@
 from graph import Graph
+from typing import List, Tuple, Any
 class GraphAlgorithms:
     def __init__(self) -> None:
         pass
@@ -14,7 +15,7 @@ class GraphAlgorithms:
         """
         #Make sure the graph is an object of the expected class
         if not isinstance(g, Graph):
-            raise ValueError(f"Provide a graph that is an instance of the Graph Class")
+            raise TypeError(f"Provide a graph that is an instance of the Graph Class")
 
         adj_list = g.adjacency_list()
 
@@ -54,4 +55,8 @@ class GraphAlgorithms:
                     return True
             
         return False
+
+    # def dijkstra(self,graph:Graph, source: Any) -> List[Tuple[Any, int]]:
+    #     if not isinstance(graph, Graph):
+    #         raise TypeError(f"")
             
