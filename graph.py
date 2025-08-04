@@ -1,4 +1,4 @@
-from typing import List, Tuple, Any, Dict, Union
+from typing import List, Tuple, Any, Dict, Union, Set
 from collections import deque
 
 type edgeType = List[Union[List[Tuple[Any, Any]], List[Tuple[Any,Any,int]]]]
@@ -62,6 +62,20 @@ class Graph:
                 adj_list[v].append((u,w))
         return adj_list
 
+    def adjacency_list_no_weights(self) -> Dict[Any, Set[Any]]:
+        """This function is used to return an adjacency list without weights or the assumed weights is 1
+
+        Returns:
+            Dict[Any, Set[Any]]: A dict of vertices as keys and their neighbors as values. 
+        """
+        adj_list = {v: set() for v in self.vertices}
+        for u,v,w in self.edges:
+            adj_list[u].add(v)
+            if not self.directed and u != v:
+                adj_list[v].add(u)
+        
+        return adj_list
+    
     def adjacency_matrix(self) -> List[List[int]]:
         """
         Generate an Adjacency Matrix based on the verticies and edges
