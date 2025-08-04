@@ -58,6 +58,51 @@ class GraphAlgorithms:
             
         return False
 
+    def is_cyclic_directed(self,g:Graph) -> bool:
+        """This function is used to detect whether there is a cycle in a Directed Graph
+
+        Args:
+            g (Graph): A graph that is the instance of the Graph class from prep module
+
+        Returns:
+            bool: Returns true if a cycle exists, false otherwise.
+        """
+        if not isinstance(g, Graph):
+            raise TypeError("Provide graph should be the instance of the graph class")
+
+        adj_list = g.adjacency_list()
+        
+        vertices = adj_list.keys()
+        
+        #Return false is the graph is empty
+        if not vertices:
+            return False
+
+        visited = set()
+        recursion_stack = set()
+        
+        def _is_cyclic(vertex):
+            
+            visited.add(vertex)
+            recursion_stack.add(vertex)
+            for neighbor, weight in adj_list[vertex]:
+                if neighbor not in visited:
+                    if _is_cyclic(neighbor):
+                        return True
+                elif neighbor in visited and neighbor in recursion_stack:
+                    return True
+            recursion_stack.remove(vertex)
+            return False
+        
+        for vertex in vertices:
+            if _is_cyclic(vertex):
+                return True
+        
+        return False
+            
+
+        
+    
     def dijkstra(self,graph:Graph, source: Any) -> List[Tuple[Any, Union[int, float]]]:
         """This method finds the shortest path from a source vertex to all other nodes in a weighted graph with non-negative edge weights
 

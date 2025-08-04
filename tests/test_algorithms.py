@@ -44,3 +44,21 @@ class TestAlgorithms(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.algorithms.shortest_distance_between_two_points(g,'a','z')
         
+    def test_is_cyclic_directed(self):
+        test_cases = [
+            ([(1, 2), (2, 3), (3, 1)], True),
+            ([(1, 2), (2, 3), (3, 4)], False),
+            ([(1, 2), (2, 3), (4, 5), (5, 4)], True),
+            ([(1, 2), (3, 4)], False),
+            ([(1, 1)], True),
+            ([(1, 2), (2, 3), (3, 1), (4, 5)], True),
+            ([], False),
+        ]
+
+        for idx, (edges, expected) in enumerate(test_cases, 1):
+            with self.subTest(test_case=idx):
+                g = Graph(edges=edges, directed=True)
+                result = self.algorithms.is_cyclic_directed(g)
+                self.assertEqual(result, expected, f"Failed for edges: {edges}")
+
+            assert result == expected, f"Test case {i} failed: got {result}, expected {expected}"
