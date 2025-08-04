@@ -39,6 +39,14 @@ class Graph:
             vertices.add(v)
         return vertices
 
+    def is_directed(self) -> bool:
+        """This function is used to check whether the user provided graph is directed or undirected. 
+
+        Returns:
+            bool: Return true if the graph is directed, false otherwise. 
+        """
+        return self.directed
+
     def adjacency_list(self) -> Dict[Any, List[Any]]:
         """
         Generate an Adjacency list based on the verticies and edges. 
