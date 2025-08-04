@@ -22,3 +22,10 @@ class TestAlgorithms(unittest.TestCase):
         g = []
         with self.assertRaises(TypeError):
             self.algorithms.is_cyclic_undirected(g)
+    
+    def test_djkstra(self):
+        g = Graph([
+            ('a', 'b', 4), ('a','c',8),('b','d',8),('b','c',11),('c','e',7),('e','d',2)
+        ])
+        shorted_paths = self.algorithms.dijkstra(g,source='a')
+        self.assertCountEqual(shorted_paths, [('c', 8), ('b', 4), ('d', 12), ('e', 14), ('a', 0)])

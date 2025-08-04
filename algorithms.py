@@ -1,5 +1,7 @@
 from graph import Graph
-from typing import List, Tuple, Any
+from typing import List, Tuple, Any, Union
+import heapq
+
 class GraphAlgorithms:
     def __init__(self) -> None:
         pass
@@ -56,7 +58,51 @@ class GraphAlgorithms:
             
         return False
 
-    # def dijkstra(self,graph:Graph, source: Any) -> List[Tuple[Any, int]]:
-    #     if not isinstance(graph, Graph):
-    #         raise TypeError(f"")
+    def dijkstra(self,graph:Graph, source: Any) -> List[Tuple[Any, Union[int, float]]]:
+        """This method finds the shortest path from a source vertex to all other nodes in a weighted graph with non-negative edge weights
+
+        Args:
+            graph (Graph): An input graph that is the instance of Graph Class from the prep module
+            source (Any): A source vertex to start the algorithm from
+
+        Raises:
+            TypeError: Raised in case of input mismatches
+            ValueError: Raised in case of incorrect input values
+
+        Returns:
+            List[Tuple[Any, int]]: Returns the list of tuples of type (v,w) where v - vertex name and w is the weight. 
+        """
+        if not isinstance(graph, Graph):
+            raise TypeError(f"Provide a graph that is the Instance of the Graph class from Prep Module")
+        adj_list = graph.adjacency_list()
+        vertices = adj_list.keys()
+        
+        if source not in vertices:
+            raise ValueError(f"Provided source vertex {source} is not present in the graph")
+        
+        distances = {vertex: float('inf') for vertex in vertices}
+        distances[source] = 0
+        prev = {vertex: None for vertex in vertices}
+
+        priority_queue = [(0, source)]
+        visited = set()
+
+        while priority_queue:
+            current_distance, current_vertex = heapq.heappop(priority_queue)
+
+            if current_vertex in visited:
+                continue
+
+            visited.add(current_vertex)
+
+            for neighbor, weight in adj_list[current_vertex]:
+                if neighbor in visited:
+                    continue
+                new_distance = current_distance + weight
+                if new_distance < distances[neighbor]:
+                    distances[neighbor] = new_distance
+                    prev[neighbor] = current_vertex
+                    heapq.heappush(priority_queue, (new_distance, neighbor))
+        
+        return [(vertex, distances[vertex]) for vertex in vertices]
             
