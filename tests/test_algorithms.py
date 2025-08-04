@@ -29,3 +29,18 @@ class TestAlgorithms(unittest.TestCase):
         ])
         shorted_paths = self.algorithms.dijkstra(g,source='a')
         self.assertCountEqual(shorted_paths, [('c', 8), ('b', 4), ('d', 12), ('e', 14), ('a', 0)])
+    
+    def test_shortest_distance_between_two_points(self):
+        g = Graph([
+            ('a', 'b', 4), ('a','c',8),('b','d',8),('b','c',11),('c','e',7),('e','d',2)
+        ])
+        shortest_distance = self.algorithms.shortest_distance_between_two_points(g, 'a', 'e')
+        self.assertEqual(shortest_distance, 14)
+    
+    def test_shortest_distance_between_two_points_missing_vertex(self):
+        g = Graph([
+            ('a', 'b', 4), ('a','c',8),('b','d',8),('b','c',11),('c','e',7),('e','d',2)
+        ])
+        with self.assertRaises(ValueError):
+            self.algorithms.shortest_distance_between_two_points(g,'a','z')
+        

@@ -105,4 +105,24 @@ class GraphAlgorithms:
                     heapq.heappush(priority_queue, (new_distance, neighbor))
         
         return [(vertex, distances[vertex]) for vertex in vertices]
+
+    def shortest_distance_between_two_points(self,graph:Graph,source:Any,dest:Any) -> Union[int,float]:
+        """This function uses the dijstra's algorithm to get the shortest distance between a given source vertex and destination vertex
+
+        Args:
+            graph (Graph): An instance of the graph class from the Prep Module. 
+            source (Any): The starting point
+            dest (Any): The ending point
+
+        Returns:
+            int: Returns the smallest possible distance between Source and Destination 
+        """
+        all_distances = self.dijkstra(graph, source)
+        for vertex, distance in all_distances:
+            if vertex == dest:
+                return distance
+        
+        raise ValueError(f"Provided Destination vertex {dest} does not exist in the graph")
+    
             
+        
