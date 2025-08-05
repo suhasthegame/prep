@@ -62,3 +62,19 @@ class TestAlgorithms(unittest.TestCase):
                 self.assertEqual(result, expected, f"Failed for edges: {edges}")
 
             assert result == expected, f"Test case {i} failed: got {result}, expected {expected}"
+    
+    def test_topological_sort(self):
+        test_cases = [
+            ([(0,1), (1,2), (0,2), (2,3)],[0,1,2,3]),
+            ([(5,2), (5,0), (4,0), (4,1), (2,3), (3,1)], [4,5,0,2,3,1]),
+            ([(0,1), (1,2), (2,0)], []),
+            ([(0,1), (2,3)], [0,1,2,3]),
+            ([], []),
+            ([(0,1),(1,2),(2,3),(3,4)], [0,1,2,3,4]),
+            ([(0,0)], [])
+        ]
+        for idx, (edges, expected) in enumerate(test_cases):
+            with self.subTest(test_case=idx):
+                g = Graph(edges=edges, directed=True)
+                result = self.algorithms.topological_sort(g)
+                self.assertCountEqual(result, expected, f"Failed for input idx {idx}")
