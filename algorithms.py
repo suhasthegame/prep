@@ -1,6 +1,7 @@
 from graph import Graph
 from typing import List, Tuple, Any, Union
 import heapq
+from collections import deque
 
 class GraphAlgorithms:
     def __init__(self) -> None:
@@ -169,5 +170,48 @@ class GraphAlgorithms:
         
         raise ValueError(f"Provided Destination vertex {dest} does not exist in the graph")
     
+    def topological_sort(self, g: Graph) -> List[Any]:
+        if not isinstance(g, Graph):
+            raise TypeError("Input graph has to be an instance of the Graph class from the prep module.")
+        
+        if not hasattr(g, 'adjacency_list') or not callable(g.adjacency_list):
+            raise ValueError("Provided graph does not have the adjacency_list method")
+        
+        if not g.is_directed():
+            print("Graph is undirected. Unable to perform Topological sort")
+            return []
+
+        if self.is_cyclic_directed(g):
+            print("Graph has a cycle, cannot perform Topological Sorting")
+            return []
+        
+        adj_list = g.adjacency_list_no_weights()
+        vertices = adj_list.keys()
+        if len(vertices) == 0:
+            print("Provided graph is empty. Returning empty list")
+            return []
+        
+        in_degree = {}
+        for src, targets in adj_list.items():
+            if src not in in_degree:
+                in_degree[src] = 0
+            for dest in targets:
+                if dest not in in_degree:
+                    in_degree[dest] = 0
+                in_degree[dest] += 1
+        
+        zero_indegree_vertices = [v for v, deg in in_degree.items() if deg == 0]
+        sort_order = []
+        queue = deque(zero_indegree_vertices)
+
+        while queue:
+            vertex = queue.popleft()
+            if in_degree[vertex] == 0:
+                sort_order.append(vertex)
+            for neighbor in adj_list[vertex]:
+                in_degree[neighbor] -= 1
+                if in_degree[neighbor] == 0:
+                    queue.append(neighbor)
+        return sort_order
             
         
